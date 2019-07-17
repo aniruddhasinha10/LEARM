@@ -81,6 +81,14 @@ p {
   color: #ffffff;
 }
 
+.camera_preview{
+  text-align: center;
+}
+
+.camera_button{
+  text-align: center;
+  /*line-height: 50%;*/
+}
 /* =============== utilities classes ====================== */
 
 .bckg-transparent {

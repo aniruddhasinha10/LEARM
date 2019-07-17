@@ -50,8 +50,11 @@
 				</div>			
 			</form>
 			<div class="ui centered card">
-				<div class="image">
-				    <img src="user-default.jpeg">
+				<div class="camera_preview" id="camera_preview">
+					<video autoplay="true" id="videoElement" width="200" height="200">
+						Your browser does not support video streaming.
+						<source src="" type="video/mp4">
+					</video>
 				</div>
 				<div class="content">
 				    <div class="center aligned">
@@ -61,8 +64,8 @@
 				</div>
 				<div class="extra content">
 					<div class="center aligned author">	
-						<i class="camera red icon"></i>
-						<i class="microphone orange icon"></i>
+						<button id="camera_button" onclick="showPreview()" class="camera_button"><i class="camera red icon"></i></button>
+						<button id="microphone_button"><i class="microphone orange icon"></i></button>
 					</div>
 				</div>
 			</div>
