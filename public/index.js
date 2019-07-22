@@ -7,36 +7,28 @@ document.getElementById('id-toggle-display').addEventListener('click', function(
 
 var preview_flag = true;
 var stream_var;
-function showPreview() {
-    // const preview_div = document.getElementById("preview_div");
-    if(preview_flag){
-        // if(preview_div.style.display==="none"||preview_div.style.display==="") {
-        // var preview_div=document.getElementById("preview_div");
+async function togglePreview() {
+    if (preview_flag) {
         if (navigator.mediaDevices.getUserMedia) {
-            navigator.mediaDevices.getUserMedia({video: true})
-                .then(function (stream) {
-                    stream_var=stream;
-                    document.getElementById("videoElement").srcObject = stream;
-                })
-                .catch(function (error) {
-                    console.log("Something went wrong!", error);
-                });
+            new Promise(async resolve => {
+                const stream = await navigator.mediaDevices.getUserMedia({video: true, audio: true});
+                stream_var = stream;
+                document.getElementById("videoElement").srcObject = stream;
+            });
+            preview_flag = false;
+        }} else {
+            stopStreams();
         }
-        preview_flag=false;
-        // }
-    }
-    else{
-        hideDiv();
-    }
 }
 
-function hideDiv(){
-    var track = stream_var.getTracks()[0];
-    track.stop();
-    // const preview_div = document.getElementById("preview_div");
-    // preview_div.style.display="none";
+function stopStreams(stream){
+    if (stream==null){
+    stream_var.getTracks().forEach(track => track.stop());
+    }
+    else{
+        stream.getTracks().forEach(track=>track.stop());
+    }
     preview_flag=true;
-
 }
 
 const recordAudio = () =>
@@ -77,3 +69,36 @@ document.getElementById('id-trigger-audio').addEventListener('click', function()
 	  audio.play();
 	})();
 });
+
+async function recordVideo(start_record_button) {
+    // start video preview
+    await togglePreview();
+    const stop_record_button = document.getElementById("stop_recording");
+    start_record_button.setAttribute("disabled","disabled");
+    stop_record_button.removeAttribute("disabled");
+
+    new Promise(async resolve => {
+        const stream = await navigator.mediaDevices.getUserMedia({audio: true, video: true});
+        const mediaRecorder = new MediaRecorder(stream);
+        const videoChunks = [];
+
+        mediaRecorder.ondataavailable = e => videoChunks.push(e.data);
+        mediaRecorder.onstop = e => downloadVideo(new Blob(videoChunks));
+
+        mediaRecorder.start();
+        stop_record_button.addEventListener("click", function () {
+            mediaRecorder.stop();
+            stop_record_button.setAttribute("disabled","disabled");
+            start_record_button.removeAttribute("disabled");
+            togglePreview();
+            stopStreams(stream);
+        });
+    });
+}
+function downloadVideo(blob){
+    let a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'recorded.webm';
+    document.body.appendChild(a);
+    a.click();
+}

@@ -58,13 +58,13 @@
 				</div>
 				<div class="content">
 				    <div class="center aligned">
-						<i class="play circle blue outline icon"></i>
-						<i class="stop circle blue outline icon"></i>
+						<button id="start_recording" onclick="recordVideo(this)"><i class="play circle blue outline icon"></i></button>
+						<button id="stop_recording" disabled="true"><i class="stop circle blue outline icon"></i></button>
 					</div>		
 				</div>
 				<div class="extra content">
 					<div class="center aligned author">	
-						<button id="camera_button" onclick="showPreview()" class="camera_button"><i class="camera red icon"></i></button>
+						<button id="camera_button" onclick="togglePreview()" class="camera_button"><i class="camera red icon"></i></button>
 						<button id="id-trigger-audio"><i class="microphone orange icon"></i></button>
 					</div>
 				</div>
