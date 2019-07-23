@@ -35,7 +35,7 @@ function stopStreams(stream){
 
 const recordAudio = () =>
     new Promise(async resolve => {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const stream = await navigator.mediaDevices.getUserMedia({audio: true});
         const mediaRecorder = new MediaRecorder(stream);
         const audioChunks = [];
 
@@ -52,16 +52,15 @@ const recordAudio = () =>
                     const audioUrl = URL.createObjectURL(audioBlob);
                     const audio = new Audio(audioUrl);
                     const play = () => audio.play();
-                    resolve({ audioBlob, audioUrl, play });
+                    resolve({audioBlob, audioUrl, play});
                 });
 
                 mediaRecorder.stop();
             });
-
-        resolve({ start, stop });
+        resolve({start, stop});
     });
 
-document.getElementById('id-trigger-audio').addEventListener('click', function() {
+document.getElementById('id-trigger-audio').addEventListener('click', function () {
     const sleep = time => new Promise(resolve => setTimeout(resolve, time));
     (async () => {
         const recorder = await recordAudio();
