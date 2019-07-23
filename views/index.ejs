@@ -6,73 +6,77 @@
 <html lang="en">
 <!--<![endif]-->
 <head>
-	<meta charset="UTF-8">
-	<title>Demo-UI</title>
-	<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css'>
-	<link rel='stylesheet' href='index.css'>
+    <meta charset="UTF-8">
+    <title>Demo-UI</title>
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css'>
+    <link rel='stylesheet' href='index.css'>
 </head>
-<body>	
-	<div class="sidebar sidebarpin">
-		<div class="sidebar-expand-icon show">
-			<i class="sign out alternate icon"></i>
-		</div>
-		<div class="sidebar-content">
-			<div class="ui segment bckg-transparent">
-				<img class="ui centered small image" src="UB_logo.png">			
-			</div>
-			<div class="ui segment bckg-transparent">
-				<h2 class="ui center aligned header" id="id-main-heading-app">
-				    LEARM
-				</h2>
-			</div>
-			<div class="ui toggle checkbox" id="id-toggle-display">
-			  	<input type="checkbox" name="toggledisplay">
-			  	<label>Participant display</label>
-			</div>
-			<form class="ui form">
-				<div class="inline fields">
-					<div class="sixteen wide field small">
-				      <label title="Technician ID">TID</label>
-				      <input type="text" placeholder="Technician ID">
-				    </div>
-				</div>
-				<div class="inline fields">
-					<div class="sixteen wide field small">
-				      <label title="Participant ID">PID</label>
-				      <input type="text" placeholder="Participant ID">
-				    </div>
-				</div>
-				<div class="inline fields">
-					<div class="sixteen wide field small">
-				      <label title="Session ID">SID</label>
-				      <input type="text" placeholder="Session ID">
-				    </div>
-				</div>			
-			</form>
-			<div class="ui centered card">
-				<div class="camera_preview" id="camera_preview">
-					<video autoplay="true" id="videoElement" width="200" height="200">
-						Your browser does not support video streaming.
-						<source src="" type="video/mp4">
-					</video>
-				</div>
-				<div class="content">
-				    <div class="center aligned">
-						<i class="play circle blue outline icon"></i>
-						<i class="stop circle blue outline icon"></i>
-					</div>		
-				</div>
-				<div class="extra content">
-					<div class="center aligned author">	
-						<button id="camera_button" onclick="showPreview()" class="camera_button"><i class="camera red icon"></i></button>
-						<button id="id-trigger-audio"><i class="microphone orange icon"></i></button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<iframe id="inlineFrameSurvey" title="Inline Frame Example" src="https://virginiatech.qualtrics.com/jfe/form/SV_9zr21jBB9mEjRVH">
-	</iframe>
-	<script src='index.js'></script>
+<body>
+<div class="sidebar sidebarpin">
+    <div class="sidebar-expand-icon show">
+        <i class="sign out alternate icon"></i>
+    </div>
+    <div class="sidebar-content">
+        <div class="ui segment bckg-transparent">
+            <img alt="SUNY Buffalo" class="ui centered small image" src="UB_logo.png">
+        </div>
+        <div class="ui segment bckg-transparent">
+            <h2 class="ui center aligned header" id="id-main-heading-app">
+                LEARM
+            </h2>
+        </div>
+        <div class="ui toggle checkbox" id="id-toggle-display">
+            <input type="checkbox" id="id-input-toggle-display" title="Toggle Participant display" name="toggledisplay">
+            <label for="id-input-toggle-display">Participant display</label>
+        </div>
+        <form class="ui form">
+            <div class="inline fields">
+                <div class="sixteen wide field small">
+                    <label for="id-input-technician-id" title="Technician ID">TID</label>
+                    <input type="text" id="id-input-technician-id" title="Enter Technician ID"
+                           placeholder="Technician ID">
+                </div>
+            </div>
+            <div class="inline fields">
+                <div class="sixteen wide field small">
+                    <label for="id-input-participant-id" title="Participant ID">PID</label>
+                    <input type="text" id="id-input-participant-id" title="Enter Participant ID"
+                           placeholder="Participant ID">
+                </div>
+            </div>
+            <div class="inline fields">
+                <div class="sixteen wide field small">
+                    <label for="id-input-session-id" title="Session ID">SID</label>
+                    <input type="text" id="id-input-session-id" title="Enter Session ID" placeholder="Session ID">
+                </div>
+            </div>
+        </form>
+        <div class="ui centered card">
+            <div class="camera_preview" id="camera_preview">
+                <video autoplay="autoplay" id="videoElement" width="200" height="200">
+                    Your browser does not support video streaming.
+                    <source src="" type="video/mp4">
+                </video>
+            </div>
+            <div class="content">
+                <div class="center aligned">
+                    <i class="play circle blue outline icon"></i>
+                    <i class="stop circle blue outline icon"></i>
+                </div>
+            </div>
+            <div class="extra content">
+                <div class="center aligned author">
+                    <button id="camera_button" onclick="showPreview()" class="camera_button"><i
+                                class="camera red icon"></i></button>
+                    <button id="id-trigger-audio"><i class="microphone orange icon"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<iframe id="inlineFrameSurvey" title="Inline Frame Example"
+        src="https://virginiatech.qualtrics.com/jfe/form/SV_9zr21jBB9mEjRVH">
+</iframe>
+<script src='index.js'></script>
 </body>
 </html>
