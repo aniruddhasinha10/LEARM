@@ -104,3 +104,7 @@ function downloadMedia(blob,record_start,type){
     document.body.appendChild(a);
     a.click();
 }
+
+async function testAV(){
+    // TODO add functionality
+}
