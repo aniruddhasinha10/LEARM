@@ -1,6 +1,12 @@
 // Common Variables
 var preview_flag = true;
 var stream_var;
+// Picking subject facing camera and setting video resolution to 1080p for best video recording quality
+const videoConstraints = {
+    facingMode: 'environment',
+    width: { ideal: 1920 },
+    height: { ideal: 1080 }
+};
 
 document.getElementById('id-toggle-display').addEventListener('click', function() {
     var ele_sidebar = document.querySelector('.sidebar');
@@ -13,7 +19,7 @@ async function togglePreview() {
     if (preview_flag) {
         if (navigator.mediaDevices.getUserMedia) {
             new Promise(async resolve => {
-                const stream = await navigator.mediaDevices.getUserMedia({video: true, audio: true});
+                const stream = await navigator.mediaDevices.getUserMedia({video: videoConstraints, audio: true});
                 stream_var = stream;
                 document.getElementById("videoElement").srcObject = stream;
             });
@@ -71,6 +77,7 @@ document.getElementById('id-trigger-audio').addEventListener('click', function (
     })();
 });
 
+
 async function recordVideo(start_record_button) {
     // start video preview
     let record_start=Date();
@@ -80,7 +87,7 @@ async function recordVideo(start_record_button) {
     stop_record_button.removeAttribute("disabled");
 
     new Promise(async resolve => {
-        const stream = await navigator.mediaDevices.getUserMedia({audio: true, video: true});
+        const stream = await navigator.mediaDevices.getUserMedia({audio: true, video: videoConstraints});
         const mediaRecorder = new MediaRecorder(stream);
         const videoChunks = [];
 
@@ -109,4 +116,17 @@ function downloadVideo(blob,record_start){
     a.download = file_name;
     document.body.appendChild(a);
     a.click();
+}
+
+// Auxiliary function : Call via console to get list of Cameras Connected
+function getConnectDevices(){
+    navigator.mediaDevices.enumerateDevices()
+        .then(function(devices) {
+            devices.forEach(function(device) {
+                if(device.kind=="videoinput"){
+                    console.log(device.kind + ": " + device.label +
+                        " id = " + device.deviceId);
+                }
+            });
+        })
 }
