@@ -12,70 +12,143 @@
     <link rel='stylesheet' href='index.css'>
 </head>
 <body>
-<div class="sidebar sidebarpin">
-    <div class="sidebar-expand-icon show">
-        <i class="sign out alternate icon"></i>
-    </div>
-    <div class="sidebar-content">
-        <div class="ui segment bckg-transparent">
-            <img alt="SUNY Buffalo" class="ui centered small image" src="UB_logo.png">
-        </div>
-        <div class="ui segment bckg-transparent">
-            <h2 class="ui center aligned header" id="id-main-heading-app">
-                LEARM
-            </h2>
-        </div>
+    <div class="ui top attached demo menu">
+        <a class="item sidebar-trigger">
+            <i class="sidebar icon"></i>
+        </a>
         <div class="ui toggle checkbox" id="id-toggle-display">
             <input type="checkbox" id="id-input-toggle-display" title="Toggle Participant display" name="toggledisplay">
-            <label for="id-input-toggle-display">Participant display</label>
+            <label for="id-input-toggle-display"></label>
         </div>
-        <form class="ui form">
-            <div class="inline fields">
-                <div class="sixteen wide field small">
-                    <label for="id-input-technician-id" title="Technician ID">TID</label>
-                    <input type="text" id="id-input-technician-id" title="Enter Technician ID"
-                           placeholder="Technician ID">
-                </div>
+    </div>
+    <div class="ui bottom attached segment sidebar-content-wrapper">
+        <div class="ui inverted wide icon left inline vertical sidebar menu">
+            <div class="ui top attached tabular menu">
+                <a class="item" data-tab="first" title="Session">
+                    <i class="desktop icon"></i>
+                </a>
+                <a class="active item" data-tab="second" title="Test">
+                    <i class="cog icon"></i>
+                </a>
+                <a class="item" data-tab="three" title="Transfer">
+                    <i class="cloud upload icon"></i>
+                </a>
+                <a class="item" data-tab="four" title="Preview">
+                    <i class="download icon"></i>
+                </a>
             </div>
-            <div class="inline fields">
-                <div class="sixteen wide field small">
-                    <label for="id-input-participant-id" title="Participant ID">PID</label>
-                    <input type="text" id="id-input-participant-id" title="Enter Participant ID"
-                           placeholder="Participant ID">
+            <div class="ui inverted tab segment" data-tab="first">
+                <h3 class="ui header sidebar-section-header">Session Control</h3>
+                <form class="ui form pad-default">
+                    <div class="inline fields">
+                        <div class="sixteen wide field small">
+                            <label for="id-input-technician-id" title="Technician ID">TID</label>
+                            <input type="text" id="id-input-technician-id" title="Enter Technician ID"
+                                   placeholder="Technician ID">
+                        </div>
+                    </div>
+                    <div class="inline fields">
+                        <div class="sixteen wide field small">
+                            <label for="id-input-participant-id" title="Participant ID">PID</label>
+                            <input type="text" id="id-input-participant-id" title="Enter Participant ID"
+                                   placeholder="Participant ID">
+                        </div>
+                    </div>
+                    <div class="inline fields">
+                        <div class="sixteen wide field small">
+                            <label for="id-input-session-id" title="Session ID">SID</label>
+                            <input type="text" id="id-input-session-id" title="Enter Session ID" placeholder="Session ID">
+                        </div>
+                    </div>
+                </form>
+                <div class="ui fitted divider"></div>
+                <div class="ui vertical buttons btn-session-control">
+                  <button id="id-btn-start-session" class="ui inverted green button" onclick="recordVideo(this)">Start Session</button>
+                  <button id="id-btn-pause-session" class="ui inverted yellow button" disabled>Pause Session</button>
+                  <button id="id-btn-stop-session" class="ui inverted red button" disabled>End Session</button>
                 </div>
-            </div>
-            <div class="inline fields">
-                <div class="sixteen wide field small">
-                    <label for="id-input-session-id" title="Session ID">SID</label>
-                    <input type="text" id="id-input-session-id" title="Enter Session ID" placeholder="Session ID">
+                <div class="ui mini olive inverted statistic">
+                  <div class="value" id="id-label-session-length">
+                    00:00:00
+                  </div>
+                  <div class="label">
+                    Recording Length
+                  </div>
                 </div>
+                <div class="ui bottom attached label">Note: Please make sure to test Video & Audio feed (test tab) before starting a session.</div>
             </div>
-        </form>
-        <div class="ui centered card">
-            <div class="camera_preview" id="camera_preview">
-                <video autoplay="autoplay" id="videoElement" width="200" height="200">
-                    Your browser does not support video streaming.
-                    <source src="" type="video/mp4">
-                </video>
-            </div>
-            <div class="content">
-                <div class="center aligned">
-					<button id="start_recording" onclick="recordVideo(this)"><i class="play circle blue outline icon"></i></button>
-					<button id="stop_recording" disabled="true"><i class="stop circle blue outline icon"></i></button>
+            <div class="ui active inverted tab segment" data-tab="second">
+                <h3 class="ui header sidebar-section-header">A/V Control</h3>
+                <div class="ui accordion pad-default">
+                    <div class="active title">
+                        <i class="icon dropdown"></i>
+                        Subject A/V Test
+                    </div>
+                    <div class="active content">
+                        <div class="camera_preview" id="camera_preview">
+                            <video autoplay="autoplay" id="videoElement" poster="user-default.jpeg" width="200" height="200">
+                                Your browser does not support video streaming.
+                                <source src="" type="video/mp4">
+                            </video>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="extra content">
-                <div class="center aligned author">
-					<button id="camera_button" onclick="togglePreview()" class="camera_button"><i class="camera red icon"></i></button>
-                    <button id="id-trigger-audio"><i class="microphone orange icon"></i></button>
+                <div class="ui accordion pad-default">
+                    <div class="title">
+                        <i class="icon dropdown"></i>
+                        Technician Audio Test
+                    </div>
+                    <div class="content">
+                        Under development
+                    </div>
                 </div>
+                <div class="ui inverted center aligned segment">
+                    <button class="ui inverted brown button">Complete</button>
+                    <button onclick="togglePreview()" class="ui inverted black button">Reset</button>
+                </div>
+                <div class="ui bottom attached label">Note: Use the reset button to toggle preview on/off.</div>               
+            </div>
+            <div class="ui inverted tab segment" data-tab="three">
+                <h3 class="ui header sidebar-section-header">Transfer</h3>
+            </div>
+            <div class="ui inverted tab segment" data-tab="four">
+                <h3 class="ui header sidebar-section-header">Preview</h3>
+                <div class="ui middle aligned selection list pad-default">
+                    <div class="item align-text-left">
+                        <img class="ui avatar image" src="user-default.jpeg">
+                        <div class="content">
+                          File1.mp4
+                        </div>
+                    </div>
+                    <div class="item align-text-left">
+                        <img class="ui avatar image" src="user-default.jpeg">
+                        <div class="content">
+                          File2.mp4
+                        </div>
+                    </div>
+                    <div class="item align-text-left">
+                        <img class="ui avatar image" src="user-default.jpeg">
+                        <div class="content">
+                          File3.wav
+                        </div>
+                    </div>
+                </div>             
+            </div>
+        </div>
+        <div class="pusher">
+            <div class="ui basic segment">
+                <iframe id="inlineFrameSurvey" title="Inline Frame Example" width="100%" height="600px" frameBorder="0"
+                        src="https://virginiatech.qualtrics.com/jfe/form/SV_9zr21jBB9mEjRVH">
+                </iframe>
             </div>
         </div>
     </div>
-</div>
-<iframe id="inlineFrameSurvey" title="Inline Frame Example"
-        src="https://virginiatech.qualtrics.com/jfe/form/SV_9zr21jBB9mEjRVH">
-</iframe>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
 <script src='index.js'></script>
+
 </body>
 </html>
