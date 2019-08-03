@@ -153,7 +153,7 @@ function downloadMedia(blob,record_start,type){
     let record_end=Date();
     let a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    let file_name = "Session_"+ type + "_" + record_start.slice(4,-33)+"_"+record_end.slice(16,-33)+".webm";
+    let file_name = "Session_"+ type + "_" + record_start.slice(4,-33)+"_"+record_end.slice(16,-33)+".mp4";
     file_name=file_name.split(" ").join("_");
     file_name=file_name.split(":").join(".");
     a.download = file_name;
