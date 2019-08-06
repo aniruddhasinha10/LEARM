@@ -13,6 +13,11 @@ const videoConstraints = {
     height: { ideal: 1080 }
 };
 
+const audioConstraints = {
+    echoCancellation: true,
+    echoCancellationType: 'system'
+};
+
 var isSessionActive = false;
 
 $('.ui.sidebar').sidebar({
@@ -41,7 +46,7 @@ async function togglePreview() {
     if (preview_flag) {
         if (navigator.mediaDevices.getUserMedia) {
             new Promise(async resolve => {
-                const stream = await navigator.mediaDevices.getUserMedia({video: videoConstraints, audio: true});
+                const stream = await navigator.mediaDevices.getUserMedia({video: videoConstraints, audio: audioConstraints});
                 stream_var = stream;
                 document.getElementById("videoElement").srcObject = stream;
             });
@@ -117,7 +122,7 @@ async function recordVideo(start_record_button) {
     // start video preview
     let record_start=Date();
     isSessionActive = true;
-    await togglePreview();
+
     // start audio capture
     const recorder = await recordAudio();
     recorder.start();
@@ -130,7 +135,7 @@ async function recordVideo(start_record_button) {
     pause_record_button.removeAttribute("disabled");
 
     new Promise(async resolve => {
-        const stream = await navigator.mediaDevices.getUserMedia({audio: true, video: videoConstraints});
+        const stream = await navigator.mediaDevices.getUserMedia({audio: audioConstraints, video: videoConstraints});
         const mediaRecorder = new MediaRecorder(stream);
         const videoChunks = [];
 
@@ -146,7 +151,6 @@ async function recordVideo(start_record_button) {
             stop_record_button.setAttribute("disabled","disabled");
             pause_record_button.setAttribute("disabled","disabled");
             start_record_button.removeAttribute("disabled");
-            togglePreview();
             stopStreams(stream);
             session_length_label.innerHTML = "00:00:00";
         });
