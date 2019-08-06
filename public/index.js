@@ -2,6 +2,10 @@
 var preview_flag = true;
 var stream_var;
 
+const consts = {
+    connector: "_"
+};
+
 // Picking subject facing camera and setting video resolution to 1080p for best video recording quality
 const videoConstraints = {
     facingMode: 'environment',
@@ -153,7 +157,9 @@ function downloadMedia(blob,record_start,type){
     let record_end=Date();
     let a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    let file_name = "Session_"+ type + "_" + record_start.slice(4,-33)+"_"+record_end.slice(16,-33)+".mp4";
+    let PID = (document.getElementById('id-input-participant-id').value!='')?document.getElementById('id-input-participant-id').value:'PID';
+    let SID = (document.getElementById('id-input-session-id').value!='')?document.getElementById('id-input-session-id').value:"SID";
+    let file_name = PID+consts.connector+SID+consts.connector+type+consts.connector+ record_start.slice(4,-33)+consts.connector+record_end.slice(16,-33)+".webm";
     file_name=file_name.split(" ").join("_");
     file_name=file_name.split(":").join(".");
     a.download = file_name;
