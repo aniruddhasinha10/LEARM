@@ -171,6 +171,13 @@ function downloadMedia(blob,record_start,type){
     a.click();
 }
 
+document.onkeyup = function(e) {
+    if (e.altKey && e.keyCode === 'L'.charCodeAt(0)) {
+        e.preventDefault();
+        document.getElementById("sidebar-toggle").click();
+    }
+}
+
 // Auxiliary function : Call via console to get list of Cameras Connected
 function getConnectDevices(){
     navigator.mediaDevices.enumerateDevices()
