@@ -1,6 +1,7 @@
 // Common Variables
 var preview_flag = true;
 var stream_var;
+var isParticipantView = false;
 
 const consts = {
     connector: "_"
@@ -23,23 +24,24 @@ var isSessionActive = false;
 $('.ui.sidebar').sidebar({
     context: $('.bottom.segment')
   })
-  .sidebar('attach events', '.menu .sidebar-trigger')
   .sidebar('setting', 'transition', 'overlay')
   .sidebar('show');
 
-$('.menu .item')
-  .tab()
-;
+$('.menu .item').tab();
 
-$('.ui.accordion')
-  .accordion()
-;
+$('.ui.accordion').accordion();
 
-document.getElementById('id-toggle-display').addEventListener('click', function() {
-    var ele_sidebar = document.querySelector('.sidebar');
-    var ele_sidebar_expand_icon = document.querySelector('.sidebar-expand-icon');
-    ele_sidebar.classList.toggle('sidebarpin');
-    ele_sidebar_expand_icon.classList.toggle('show');
+document.getElementById("id-sidebar-trigger").addEventListener('click', function() {
+    if (!isParticipantView) {
+        $('.ui.sidebar').sidebar('toggle');
+    }
+});
+
+document.getElementById('id-input-toggle-display').addEventListener('click', function() {
+    isParticipantView = !isParticipantView;
+    if (isParticipantView) {
+        $('.ui.sidebar').sidebar('hide');
+    }
 });
 
 async function togglePreview() {
@@ -174,7 +176,7 @@ function downloadMedia(blob,record_start,type){
 document.onkeyup = function(e) {
     if (e.altKey && e.keyCode === 'L'.charCodeAt(0)) {
         e.preventDefault();
-        document.getElementById("sidebar-toggle").click();
+        document.getElementById("id-sidebar-trigger").click();
     }
 }
 
