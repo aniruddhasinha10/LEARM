@@ -103,10 +103,53 @@
                     <button class="ui inverted brown button">Complete</button>
                     <button onclick="togglePreview()" class="ui inverted black button">Reset</button>
                 </div>
-                <div class="ui bottom attached label">Note: Use the reset button to toggle preview on/off.</div>               
+                <div class="ui bottom attached label">Note: Use the reset button to toggle preview on/off.</div>
             </div>
             <div class="ui inverted tab segment" data-tab="three">
                 <h3 class="ui header sidebar-section-header">Transfer</h3>
+                <form class="ui form pad-default">
+                  <div class="fields">
+                    <div class="sixteen wide field small">
+                      <label for="id-input-local-directory" title="Local Directory">Local Directory</label>
+                      <input type="file" id="id-input-local-directory" name="myFile">
+                    </div>
+                  </div>
+                </form>
+                <div class="ui fitted divider"></div>
+                <form class="ui form pad-default">
+                  <div class="inline fields">
+                    <div class="sixteen wide field small">
+                      <label for="id-input-file-size" title="File Size">File Size</label>
+                      <input type="text" id="id-input-file-size" title="File Size" placeholder="File Size">
+                    </div>
+                  </div>
+                  <div class="inline fields">
+                    <div class="sixteen wide field small">
+                      <label for="id-input-file-name" title="File Name">File Name</label>
+                      <input type="text" id="id-input-file-name" title="File Name" placeholder="File Name">
+                    </div>
+                  </div>
+                </form>
+                <div class="ui fitted divider"></div>
+                <form class="ui form pad-default">
+                  <div class="inline fields">
+                    <div class="sixteen wide field small">
+                      <label for="id-input-transfer-host" title="Transfer Host">Transfer Host</label>
+                      <input type="text" id="id-input-transfer-host" title="Transfer Host" placeholder="Transfer Host">
+                    </div>
+                  </div>
+                  <div class="inline fields">
+                    <div class="sixteen wide field small">
+                      <label for="id-input-transfer-path" title="Transfer Path">Transfer Path</label>
+                      <input type="text" id="id-input-transfer-path" title="Transfer Path" placeholder="Transfer Path">
+                    </div>
+                  </div>
+                </form>
+                <div class="ui fitted divider"></div>
+                <div class="ui inverted center aligned segment">
+                    <button class="ui inverted blue button">Transfer File</button>
+                    <button onclick="" class="ui inverted black button">Reset</button>
+                </div>
             </div>
         </div>
         <div class="pusher">
