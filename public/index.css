@@ -61,6 +61,8 @@ p {
 .ui.vertical.buttons.btn-session-control .button {
     width: 50%;
     margin: 0.55em 0;
+    padding-left: 1em;
+    padding-right: 1em;
 }
 
 /* =============== utilities classes ====================== */
@@ -71,6 +73,10 @@ p {
 
 .pad-default {
     padding: 1em!important;
+}
+
+.p0 {
+    padding: 0!important;
 }
 
 .align-text-left {

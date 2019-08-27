@@ -19,30 +19,119 @@ const audioConstraints = {
     echoCancellationType: 'system'
 };
 
+var SessionTest = {
+    isAudioTestSubjectReq: false,
+    isAudioTestTechnicianReq: false,
+    isVideoTestSubjectReq: true,
+    urlVideo: null
+}
+
 var isSessionActive = false;
 
-$('.ui.sidebar').sidebar({
-    context: $('.bottom.segment')
-  })
-  .sidebar('setting', 'transition', 'overlay')
-  .sidebar('show');
+function bindEventListener(){
 
-$('.menu .item').tab();
+    document.getElementById("id-sidebar-trigger").addEventListener('click', function() {
+        if (!isParticipantView) {
+            $('.ui.sidebar').sidebar('toggle');
+        }
+    });
 
-$('.ui.accordion').accordion();
+    document.getElementById('id-input-toggle-display').addEventListener('click', function() {
+        if(isParticipantView) {
+            window.location.href = `http://localhost:3000/internal`;   
+        }
+        isParticipantView = !isParticipantView;
+        if (isParticipantView) {    
+            $('.ui.sidebar').sidebar('hide');
+            window.location.href = `http://localhost:3000/duplicate`;
+        }
+    });
 
-document.getElementById("id-sidebar-trigger").addEventListener('click', function() {
-    if (!isParticipantView) {
-        $('.ui.sidebar').sidebar('toggle');
+    document.onkeyup = function(e) {
+        if (e.altKey && e.keyCode === 'L'.charCodeAt(0)) {
+            e.preventDefault();
+            document.getElementById("id-sidebar-trigger").click();
+        }
     }
-});
+}
 
-document.getElementById('id-input-toggle-display').addEventListener('click', function() {
-    isParticipantView = !isParticipantView;
-    if (isParticipantView) {
-        $('.ui.sidebar').sidebar('hide');
+function initUI(){
+    $('.ui.sidebar').sidebar({
+        context: $('.bottom.segment')
+      })
+      .sidebar('setting', 'transition', 'overlay')
+      .sidebar('show');
+
+    $('.menu .item').tab();
+
+    $('.ui.accordion').accordion();
+
+    $('.ui.form')
+      .form({
+        fields: {
+          "id-input-technician-id" : 'empty',
+          "id-input-participant-id"   : 'empty',
+          "id-input-session-id" : 'empty'
+        }
+      })
+    ;
+
+    bindEventListener();
+}
+
+// ===================== Test module ==========================================
+
+// start a video stream for 10 seconds
+async function TestSubjectVideo() {
+     if (navigator.mediaDevices.getUserMedia) {
+        new Promise(async resolve => {
+            await navigator.mediaDevices.getUserMedia({video: videoConstraints, audio: audioConstraints}).then(stream => {
+                document.getElementById("videoElement").srcObject = stream;
+                const mediaRecorder = new MediaRecorder(stream);
+                mediaRecorder.start();
+
+                const videoChunks = [];
+
+                mediaRecorder.addEventListener("stop", () => {
+                  const videoBlob = new Blob(videoChunks);
+                  SessionTest.urlVideo = URL.createObjectURL(videoBlob);
+                  stopStreams(stream);                  
+                });
+
+                mediaRecorder.addEventListener("dataavailable", event => {
+                    videoChunks.push(event.data);
+                });
+
+                setTimeout(() => {
+                  mediaRecorder.stop();
+                }, 10000);
+            });
+        });
     }
-});
+}
+
+// play the test video for 10 seconds
+function PlaySubjectTestVideo() {
+    document.getElementById("videoElement").srcObject = null;
+    document.getElementById("videoElement").src = SessionTest.urlVideo;
+    setTimeout(() => {
+      document.getElementById("videoElement").src = "";
+    }, 10000);
+}
+
+// make the test variable true depending on the test type
+// if all three variable are true - make the start button enable
+function TestConfirm(strTestType){
+    if(strTestType == 'TestSubjectVideo'){
+        SessionTest.isVideoTestSubjectReq = false;
+    }
+    if(!SessionTest.isVideoTestSubjectReq && !SessionTest.isAudioTestSubjectReq && !SessionTest.isAudioTestTechnicianReq) {
+        $("#id-test-require-label").hide();
+        document.getElementById("id-btn-start-session").removeAttribute("disabled");
+    }
+}
+
+// ===================== Test module ==========================================
 
 async function togglePreview() {
     if (preview_flag) {
@@ -53,8 +142,9 @@ async function togglePreview() {
                 document.getElementById("videoElement").srcObject = stream;
             });
             preview_flag = false;
-        }} else {
-        stopStreams();
+        } else {
+            stopStreams();
+        }
     }
 }
 
@@ -121,42 +211,44 @@ function updateSessionTimer(element_timer_label){
 }
 
 async function recordVideo(start_record_button) {
-    // start video preview
-    let record_start=Date();
-    isSessionActive = true;
+    if( $('.ui.form').form('is valid')) {
+        // start video preview
+        let record_start=Date();
+        isSessionActive = true;
 
-    // start audio capture
-    const recorder = await recordAudio();
-    recorder.start();
-    const stop_record_button = document.getElementById("id-btn-stop-session");
-    const pause_record_button = document.getElementById("id-btn-pause-session");
-    const session_length_label = document.getElementById("id-label-session-length");
+        // start audio capture
+        const recorder = await recordAudio();
+        recorder.start();
+        const stop_record_button = document.getElementById("id-btn-stop-session");
+        const pause_record_button = document.getElementById("id-btn-pause-session");
+        const session_length_label = document.getElementById("id-label-session-length");
 
-    start_record_button.setAttribute("disabled","disabled");
-    stop_record_button.removeAttribute("disabled");
-    pause_record_button.removeAttribute("disabled");
+        start_record_button.setAttribute("disabled","disabled");
+        stop_record_button.removeAttribute("disabled");
+        pause_record_button.removeAttribute("disabled");
 
-    new Promise(async resolve => {
-        const stream = await navigator.mediaDevices.getUserMedia({audio: audioConstraints, video: videoConstraints});
-        const mediaRecorder = new MediaRecorder(stream);
-        const videoChunks = [];
+        new Promise(async resolve => {
+            const stream = await navigator.mediaDevices.getUserMedia({audio: audioConstraints, video: videoConstraints});
+            const mediaRecorder = new MediaRecorder(stream);
+            const videoChunks = [];
 
-        mediaRecorder.ondataavailable = e => videoChunks.push(e.data);
-        mediaRecorder.onstop = e => downloadMedia(new Blob(videoChunks),record_start,'video');
-        mediaRecorder.start();
-        updateSessionTimer(session_length_label);
-        stop_record_button.addEventListener("click", function () {            
-            mediaRecorder.stop();
-            isSessionActive = false;
-            // stop and download the audio
-            recorder.stop(record_start);            
-            stop_record_button.setAttribute("disabled","disabled");
-            pause_record_button.setAttribute("disabled","disabled");
-            start_record_button.removeAttribute("disabled");
-            stopStreams(stream);
-            session_length_label.innerHTML = "00:00:00";
+            mediaRecorder.ondataavailable = e => videoChunks.push(e.data);
+            mediaRecorder.onstop = e => downloadMedia(new Blob(videoChunks),record_start,'video');
+            mediaRecorder.start();
+            updateSessionTimer(session_length_label);
+            stop_record_button.addEventListener("click", function () {            
+                mediaRecorder.stop();
+                isSessionActive = false;
+                // stop and download the audio
+                recorder.stop(record_start);            
+                stop_record_button.setAttribute("disabled","disabled");
+                pause_record_button.setAttribute("disabled","disabled");
+                start_record_button.removeAttribute("disabled");
+                stopStreams(stream);
+                session_length_label.innerHTML = "00:00:00";
+            });
         });
-    });
+    }    
 }
 
 function downloadMedia(blob,record_start,type){
@@ -173,13 +265,6 @@ function downloadMedia(blob,record_start,type){
     a.click();
 }
 
-document.onkeyup = function(e) {
-    if (e.altKey && e.keyCode === 'L'.charCodeAt(0)) {
-        e.preventDefault();
-        document.getElementById("id-sidebar-trigger").click();
-    }
-}
-
 // Auxiliary function : Call via console to get list of Cameras Connected
 function getConnectDevices(){
     navigator.mediaDevices.enumerateDevices()
@@ -192,3 +277,6 @@ function getConnectDevices(){
             });
         })
 }
+
+// initial function to be called when the script loads
+initUI();

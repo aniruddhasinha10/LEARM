@@ -36,7 +36,7 @@
             </div>
             <div class="ui inverted tab segment" data-tab="first">
                 <h3 class="ui header sidebar-section-header">Session Control</h3>
-                <form class="ui form pad-default">
+                <form onsubmit="return false;" class="ui form pad-default">
                     <div class="inline fields">
                         <div class="sixteen wide field small">
                             <label for="id-input-technician-id" title="Technician ID">TID</label>
@@ -57,13 +57,13 @@
                             <input type="text" id="id-input-session-id" title="Enter Session ID" placeholder="Session ID">
                         </div>
                     </div>
+                    <div class="ui fitted divider"></div>
+                    <div class="ui vertical buttons btn-session-control">
+                      <button id="id-btn-start-session" class="ui inverted submit green button" onclick="recordVideo(this)" disabled>Start Session</button>
+                      <button id="id-btn-pause-session" class="ui inverted yellow button" disabled>Pause Session</button>
+                      <button id="id-btn-stop-session" class="ui inverted red button" disabled>End Session</button>
+                    </div>
                 </form>
-                <div class="ui fitted divider"></div>
-                <div class="ui vertical buttons btn-session-control">
-                  <button id="id-btn-start-session" class="ui inverted green button" onclick="recordVideo(this)">Start Session</button>
-                  <button id="id-btn-pause-session" class="ui inverted yellow button" disabled>Pause Session</button>
-                  <button id="id-btn-stop-session" class="ui inverted red button" disabled>End Session</button>
-                </div>
                 <div class="ui mini olive inverted statistic">
                   <div class="value" id="id-label-session-length">
                     00:00:00
@@ -75,34 +75,62 @@
                 <div class="ui bottom attached label">Note: Please make sure to test Video & Audio feed (test tab) before starting a session.</div>
             </div>
             <div class="ui active inverted tab segment" data-tab="second">
-                <h3 class="ui header sidebar-section-header">A/V Control</h3>
-                <div class="ui accordion pad-default">
-                    <div class="active title">
-                        <i class="icon dropdown"></i>
-                        Subject A/V
+                <div class="ui inverted segment p0" style="overflow: auto; height: calc(100% - 50px);">
+                    <h3 class="ui header sidebar-section-header">
+                        A/V Control
+                        <div id="id-test-require-label" class="ui left pointing red label">
+                          Complete Test!
+                        </div>
+                    </h3>
+                    <div class="ui accordion pad-default">
+                        <div class="active title">
+                            <i class="icon dropdown"></i>
+                            Subject Video
+                        </div>
+                        <div class="active content">
+                            <div class="camera_preview" id="camera_preview">
+                                <video autoplay="autoplay" id="videoElement" poster="user-default.jpeg" width="200" height="200">
+                                    Your browser does not support video streaming.
+                                    <source src="" type="video/mp4">
+                                </video>
+                            </div>
+                            <div class="ui inverted center aligned segment p0">
+                                <button onclick="TestSubjectVideo()" class="ui inverted brown button">Test</button>
+                                <button onclick="PlaySubjectTestVideo()" class="ui inverted brown button">Play</button>
+                                <button onclick="TestConfirm('TestSubjectVideo')" class="ui inverted black button">Ok</button>
+                            </div>
+                        </div>                       
                     </div>
-                    <div class="active content">
-                        <div class="camera_preview" id="camera_preview">
-                            <video autoplay="autoplay" id="videoElement" poster="user-default.jpeg" width="200" height="200">
-                                Your browser does not support video streaming.
-                                <source src="" type="video/mp4">
-                            </video>
+                    <div class="ui accordion pad-default">
+                        <div class="title">
+                            <i class="icon dropdown"></i>
+                            Subject Audio
+                        </div>
+                        <div class="content">
+                            Under development
+                            <div class="ui inverted center aligned segment p0">
+                                <button class="ui inverted brown button">Test</button>
+                                <button class="ui inverted black button">Ok</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="ui accordion pad-default">
-                    <div class="title">
-                        <i class="icon dropdown"></i>
-                        Technician Audio
+                    <div class="ui accordion pad-default">
+                        <div class="title">
+                            <i class="icon dropdown"></i>
+                            Technician Audio
+                        </div>
+                        <div class="content">
+                            Under development
+                            <div class="ui inverted center aligned segment p0">
+                                <button class="ui inverted brown button">Test</button>
+                                <button class="ui inverted black button">Ok</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="content">
-                        Under development
-                    </div>
-                </div>
-                <div class="ui inverted center aligned segment">
-                    <button class="ui inverted brown button">Complete</button>
-                    <button onclick="togglePreview()" class="ui inverted black button">Reset</button>
-                </div>
+                    <div class="ui inverted center aligned segment">
+                        <button onclick="togglePreview()" class="ui inverted black button">Reset</button>
+                    </div>    
+                </div>                
                 <div class="ui bottom attached label">Note: Use the reset button to toggle preview on/off.</div>               
             </div>
             <div class="ui inverted tab segment" data-tab="three">
@@ -118,8 +146,7 @@
         </div>
     </div>
 
-<script src="https://code.jquery.com/jquery-3.1.1.min.js"
-  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
   crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
 <script src='index.js'></script>
