@@ -24,7 +24,7 @@
     <div class="ui bottom attached segment sidebar-content-wrapper">
         <div class="ui inverted wide icon left inline vertical sidebar menu">
             <div class="ui top attached tabular menu">
-                <a class="item" data-tab="first" title="Session">
+                <a id='session_section' class="item" data-tab="first" title="Session">
                     <i class="desktop icon"></i>
                 </a>
                 <a class="active item" data-tab="second" title="Test">
@@ -83,47 +83,49 @@
                         </div>
                     </h3>
                     <div class="ui accordion pad-default">
-                        <div class="active title">
+                        <div id="subject_video_active" class="active title">
                             <i class="icon dropdown"></i>
                             Subject Video
                         </div>
                         <div class="active content">
                             <div class="camera_preview" id="camera_preview">
-                                <video autoplay="autoplay" id="videoElement" poster="user-default.jpeg" width="200" height="200">
+                                <video autoplay="autoplay" id="videoElement" poster="user-default.jpeg" width="200px" height="100px">
                                     Your browser does not support video streaming.
                                     <source src="" type="video/mp4">
                                 </video>
                             </div>
                             <div class="ui inverted center aligned segment p0">
-                                <button onclick="TestSubjectVideo()" class="ui inverted brown button">Test</button>
-                                <button onclick="PlaySubjectTestVideo()" class="ui inverted brown button">Play</button>
-                                <button onclick="TestConfirm('TestSubjectVideo')" class="ui inverted black button">Ok</button>
+                                <button onclick="TestSubjectVideo()" class="ui inverted red button"><i class="video icon"></i></button>
+                                <button onclick="PlaySubjectTestVideo()" class="ui inverted white button"><i class="play icon"></i></button>
+                                <button onclick="TestConfirm('TestSubjectVideo')" class="ui inverted green button"><i class="thumbs up icon"></i></button>
                             </div>
                         </div>                       
                     </div>
                     <div class="ui accordion pad-default">
-                        <div class="title">
+                        <div id="subject_audio_active" class="title">
                             <i class="icon dropdown"></i>
                             Subject Audio
                         </div>
                         <div class="content">
-                            Under development
+                            <div id="recording_status_subject">
+                            </div>
                             <div class="ui inverted center aligned segment p0">
-                                <button class="ui inverted brown button">Test</button>
-                                <button class="ui inverted black button">Ok</button>
+                                <button onclick="testAudio('subject')" class="ui inverted red button"><i class="video icon"></i></button>
+                                <button onclick="TestConfirm('TestSubjectAudio')" class="ui inverted green button"><i class="thumbs up icon"></i></button>
                             </div>
                         </div>
                     </div>
                     <div class="ui accordion pad-default">
-                        <div class="title">
+                        <div id="technician_audio_active" class="title">
                             <i class="icon dropdown"></i>
                             Technician Audio
                         </div>
                         <div class="content">
-                            Under development
+                            <div id="recording_status_technician">
+                            </div>
                             <div class="ui inverted center aligned segment p0">
-                                <button class="ui inverted brown button">Test</button>
-                                <button class="ui inverted black button">Ok</button>
+                                <button onclick="testAudio('technician')" class="ui inverted red button"><i class="video icon"></i></button>
+                                <button onclick="TestConfirm('TestTechnicianAudio')" class="ui inverted green button"><i class="thumbs up icon"></i></button>
                             </div>
                         </div>
                     </div>

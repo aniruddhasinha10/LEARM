@@ -19,9 +19,14 @@ const audioConstraints = {
     echoCancellationType: 'system'
 };
 
+const audioConstraints_env = {
+    facingMode: 'environment',
+    echoCancellation: true,
+    echoCancellationType: 'system'
+}
 var SessionTest = {
-    isAudioTestSubjectReq: false,
-    isAudioTestTechnicianReq: false,
+    isAudioTestSubjectReq: true,
+    isAudioTestTechnicianReq: true,
     isVideoTestSubjectReq: true,
     urlVideo: null
 }
@@ -85,7 +90,7 @@ function initUI(){
 async function TestSubjectVideo() {
      if (navigator.mediaDevices.getUserMedia) {
         new Promise(async resolve => {
-            await navigator.mediaDevices.getUserMedia({video: videoConstraints, audio: audioConstraints}).then(stream => {
+            await navigator.mediaDevices.getUserMedia({video: videoConstraints}).then(stream => {
                 document.getElementById("videoElement").srcObject = stream;
                 const mediaRecorder = new MediaRecorder(stream);
                 mediaRecorder.start();
@@ -123,11 +128,23 @@ function PlaySubjectTestVideo() {
 // if all three variable are true - make the start button enable
 function TestConfirm(strTestType){
     if(strTestType == 'TestSubjectVideo'){
+        document.getElementById('subject_video_active').click();
+        document.getElementById('subject_audio_active').click();
         SessionTest.isVideoTestSubjectReq = false;
+    }
+    if(strTestType== 'TestSubjectAudio'){
+        document.getElementById('subject_audio_active').click();
+        document.getElementById('technician_audio_active').click();
+        SessionTest.isAudioTestSubjectReq = false;
+    }
+    if(strTestType == 'TestTechnicianAudio'){
+        document.getElementById('technician_audio_active').click();
+        SessionTest.isAudioTestTechnicianReq = false;
     }
     if(!SessionTest.isVideoTestSubjectReq && !SessionTest.isAudioTestSubjectReq && !SessionTest.isAudioTestTechnicianReq) {
         $("#id-test-require-label").hide();
         document.getElementById("id-btn-start-session").removeAttribute("disabled");
+        document.getElementById('session_section').click();
     }
 }
 
@@ -276,6 +293,62 @@ function getConnectDevices(){
                 }
             });
         })
+}
+
+function recordTestAudio(mode) {
+    return new Promise(async resolve => {
+        let stream = null;
+        if(mode=='subject') {
+            let subject_status_div = document.getElementById('recording_status_subject');
+            let content=subject_status_div.innerHTML;
+            content=content.concat('<p id="recording_progress" style="text-align: center"><i class="icon microphone"></i> </p>');
+            subject_status_div.innerHTML=content;
+            stream = await navigator.mediaDevices.getUserMedia({audio:audioConstraints_env});
+        }
+        else{
+            let subject_status_div = document.getElementById('recording_status_technician');
+            let content=subject_status_div.innerHTML;
+            content=content.concat('<p id="recording_progress" style="text-align: center"><i class="icon microphone"></i> </p>');
+            subject_status_div.innerHTML=content;
+            stream = await navigator.mediaDevices.getUserMedia({audio:audioConstraints});
+        }
+        const mediaRecorder = new MediaRecorder(stream);
+        const audioChunks = [];
+
+        mediaRecorder.addEventListener("dataavailable", event => {
+            audioChunks.push(event.data);
+        });
+
+        const stop = () => {
+            let audio=null;
+            mediaRecorder.addEventListener("stop", () => {
+                const audioBlob = new Blob(audioChunks);
+                const audioUrl = URL.createObjectURL(audioBlob);
+                audio = new Audio(audioUrl);
+                // downloadMedia(audioBlob,record_start,'audio');
+                // return audio;
+                audio.play();
+            });
+
+            mediaRecorder.stop();
+        }
+        const start = () => mediaRecorder.start();
+        resolve({start, stop});
+    });
+}
+const sleep = time => new Promise(resolve => setTimeout(resolve, time));
+
+async function testAudio(mode){
+    const recorder = await recordTestAudio(mode);
+    recorder.start();
+    await sleep(3000);
+    removeStatus();
+    await recorder.stop();
+};
+
+function removeStatus() {
+    let recording_progress = document.getElementById('recording_progress');
+    recording_progress.parentNode.removeChild(recording_progress);
 }
 
 // initial function to be called when the script loads
