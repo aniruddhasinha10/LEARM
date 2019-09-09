@@ -2,6 +2,7 @@
 var preview_flag = true;
 var stream_var;
 var isParticipantView = false;
+var recorder=null;
 
 const consts = {
     connector: "_"
@@ -130,15 +131,18 @@ function TestConfirm(strTestType){
     if(strTestType == 'TestSubjectVideo'){
         document.getElementById('subject_video_active').click();
         document.getElementById('subject_audio_active').click();
+        document.getElementById('subject_video_okay').disabled=true;
         SessionTest.isVideoTestSubjectReq = false;
     }
     if(strTestType== 'TestSubjectAudio'){
         document.getElementById('subject_audio_active').click();
         document.getElementById('technician_audio_active').click();
+        document.getElementById('subject_audio_okay').disabled = true;
         SessionTest.isAudioTestSubjectReq = false;
     }
     if(strTestType == 'TestTechnicianAudio'){
         document.getElementById('technician_audio_active').click();
+        document.getElementById('technician_audio_okay').disabled = true;
         SessionTest.isAudioTestTechnicianReq = false;
     }
     if(!SessionTest.isVideoTestSubjectReq && !SessionTest.isAudioTestSubjectReq && !SessionTest.isAudioTestTechnicianReq) {
@@ -298,6 +302,7 @@ function getConnectDevices(){
 function recordTestAudio(mode) {
     return new Promise(async resolve => {
         let stream = null;
+        let audio;
         if(mode=='subject') {
             let subject_status_div = document.getElementById('recording_status_subject');
             let content=subject_status_div.innerHTML;
@@ -320,31 +325,40 @@ function recordTestAudio(mode) {
         });
 
         const stop = () => {
-            let audio=null;
             mediaRecorder.addEventListener("stop", () => {
                 const audioBlob = new Blob(audioChunks);
                 const audioUrl = URL.createObjectURL(audioBlob);
                 audio = new Audio(audioUrl);
                 // downloadMedia(audioBlob,record_start,'audio');
                 // return audio;
-                audio.play();
+                // audio.play();
             });
 
             mediaRecorder.stop();
         }
         const start = () => mediaRecorder.start();
-        resolve({start, stop});
+        const playAudio = () =>{
+            audio.play;
+        }
+        resolve({start, stop,playAudio});
     });
 }
 const sleep = time => new Promise(resolve => setTimeout(resolve, time));
 
 async function testAudio(mode){
-    const recorder = await recordTestAudio(mode);
+    recorder = await recordTestAudio(mode);
     recorder.start();
     await sleep(3000);
     removeStatus();
     await recorder.stop();
+    // recorder.audio.play;
 };
+
+function playTestAudio(){
+    if(recorder!=null){
+        recorder.playAudio();
+    }
+}
 
 function removeStatus() {
     let recording_progress = document.getElementById('recording_progress');

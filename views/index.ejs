@@ -95,9 +95,9 @@
                                 </video>
                             </div>
                             <div class="ui inverted center aligned segment p0">
-                                <button onclick="TestSubjectVideo()" class="ui inverted red button"><i class="video icon"></i></button>
+                                <button onclick="TestSubjectVideo()" class="ui inverted red button" size="small"><i class="video icon"></i></button>
                                 <button onclick="PlaySubjectTestVideo()" class="ui inverted white button"><i class="play icon"></i></button>
-                                <button onclick="TestConfirm('TestSubjectVideo')" class="ui inverted green button"><i class="thumbs up icon"></i></button>
+                                <button id='subject_video_okay' onclick="TestConfirm('TestSubjectVideo')" class="ui inverted green button"><i class="thumbs up icon"></i></button>
                             </div>
                         </div>                       
                     </div>
@@ -111,7 +111,8 @@
                             </div>
                             <div class="ui inverted center aligned segment p0">
                                 <button onclick="testAudio('subject')" class="ui inverted red button"><i class="video icon"></i></button>
-                                <button onclick="TestConfirm('TestSubjectAudio')" class="ui inverted green button"><i class="thumbs up icon"></i></button>
+                                <button onclick="playTestAudio()" class="ui inverted white button"><i class="play icon"></i></button>
+                                <button id='subject_audio_okay' onclick="TestConfirm('TestSubjectAudio')" class="ui inverted green button"><i class="thumbs up icon"></i></button>
                             </div>
                         </div>
                     </div>
@@ -125,7 +126,8 @@
                             </div>
                             <div class="ui inverted center aligned segment p0">
                                 <button onclick="testAudio('technician')" class="ui inverted red button"><i class="video icon"></i></button>
-                                <button onclick="TestConfirm('TestTechnicianAudio')" class="ui inverted green button"><i class="thumbs up icon"></i></button>
+                                <button onclick="playTestAudio()" class="ui inverted white button"><i class="play icon"></i></button>
+                                <button id='technician_audio_okay' onclick="TestConfirm('TestTechnicianAudio')" class="ui inverted green button"><i class="thumbs up icon"></i></button>
                             </div>
                         </div>
                     </div>
