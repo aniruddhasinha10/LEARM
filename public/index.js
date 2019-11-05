@@ -3,6 +3,8 @@ var preview_flag = true;
 var stream_var;
 var isParticipantView = false;
 var recorder=null;
+var session_part = 1;
+var last_start_time = 0;
 
 const consts = {
     connector: "_"
@@ -26,9 +28,9 @@ const audioConstraints_env = {
     echoCancellationType: 'system'
 }
 var SessionTest = {
-    isAudioTestSubjectReq: true,
-    isAudioTestTechnicianReq: true,
-    isVideoTestSubjectReq: true,
+    isAudioTestSubjectReq: false,
+    isAudioTestTechnicianReq: false,
+    isVideoTestSubjectReq: false,
     urlVideo: null
 }
 
@@ -207,28 +209,47 @@ const recordAudio = () =>
         resolve({start, stop});
     });
 
-function updateSessionTimer(element_timer_label){
-    let start_time = new Date().getTime();
+function resetStartTimer(){
+    last_start_time = 0;
+}
+
+function updateSessionTimer(){
+    // no need to do anythings
+    let current_start_time = new Date().getTime();
+
     // Update the count down every 1 second
     let x = setInterval(function() {
 
       let now = new Date().getTime();
+      let distanceMain = now - current_start_time;
 
-      let distance = now - start_time;
+      // Time calculations for hours, minutes and seconds for current timer
+      let chours = ("0" + Math.floor((distanceMain % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).slice(-2);
+      let cminutes = ("0" + Math.floor((distanceMain % (1000 * 60 * 60)) / (1000 * 60))).slice(-2);
+      let cseconds = ("0" + Math.floor((distanceMain % (1000 * 60)) / 1000)).slice(-2);
 
-      // Time calculations for hours, minutes and seconds
-      let hours = ("0" + Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).slice(-2);
-      let minutes = ("0" + Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).slice(-2);
-      let seconds = ("0" + Math.floor((distance % (1000 * 60)) / 1000)).slice(-2);
+      // Time calculations for hours, minutes and seconds for main timer
+      let hours = chours;
+      let minutes = cminutes;
+      let seconds = cseconds;
+
+      if(session_part > 1) {
+          let dmain = last_start_time + distanceMain;
+          hours = ("0" + Math.floor((dmain % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).slice(-2);
+          minutes = ("0" + Math.floor((dmain % (1000 * 60 * 60)) / (1000 * 60))).slice(-2);
+          seconds = ("0" + Math.floor((dmain % (1000 * 60)) / 1000)).slice(-2);
+      }
 
       if(isSessionActive){
         document.getElementById("id-label-session-length").innerHTML = hours + ":" + minutes + ":" + seconds;
+        document.getElementById("id-label-session-part-length").innerHTML = chours + ":" + cminutes + ":" + cseconds;
       }
 
       if (!isSessionActive) {
+        last_start_time += distanceMain;
         clearInterval(x);
       }
-    }, 1000);
+    }, 500);
 }
 
 async function recordVideo(start_record_button) {
@@ -243,7 +264,7 @@ async function recordVideo(start_record_button) {
         const stop_record_button = document.getElementById("id-btn-stop-session");
         const pause_record_button = document.getElementById("id-btn-pause-session");
         const session_length_label = document.getElementById("id-label-session-length");
-
+        const session_part_length_label = document.getElementById("id-label-session-part-length");
         start_record_button.setAttribute("disabled","disabled");
         stop_record_button.removeAttribute("disabled");
         pause_record_button.removeAttribute("disabled");
@@ -252,39 +273,94 @@ async function recordVideo(start_record_button) {
             const stream = await navigator.mediaDevices.getUserMedia({audio: audioConstraints, video: videoConstraints});
             const mediaRecorder = new MediaRecorder(stream);
             const videoChunks = [];
-
+            document.getElementById("videoElement").srcObject = stream;
             mediaRecorder.ondataavailable = e => videoChunks.push(e.data);
             mediaRecorder.onstop = e => downloadMedia(new Blob(videoChunks),record_start,'video');
             mediaRecorder.start();
-            updateSessionTimer(session_length_label);
-            stop_record_button.addEventListener("click", function () {            
-                mediaRecorder.stop();
+            if (session_part == 1) {
+                let PID = (document.getElementById('id-input-participant-id').value!='')?document.getElementById('id-input-participant-id').value:'PID';
+                let SID = (document.getElementById('id-input-session-id').value!='')?document.getElementById('id-input-session-id').value:"SID";
+                fetch('/startsession',
+                {
+                    method: 'post',
+                    body: JSON.stringify({ sid: SID, pid: PID }),
+                    headers: {
+                      'Content-Type': 'application/json'
+                    }
+                }); 
+                resetStartTimer();
+            }
+            updateSessionTimer();
+            stop_record_button.addEventListener("click", function () {   
+                if(isSessionActive){
+                    mediaRecorder.stop();
+                    // stop and download the audio
+                    recorder.stop(record_start);  
+                    stopStreams(stream);
+                }                
                 isSessionActive = false;
-                // stop and download the audio
-                recorder.stop(record_start);            
+                resetStartTimer();
                 stop_record_button.setAttribute("disabled","disabled");
                 pause_record_button.setAttribute("disabled","disabled");
                 start_record_button.removeAttribute("disabled");
-                stopStreams(stream);
+                setTimeout(function() {
+                    session_part = 1; 
+                    $("form").find("input[type='text']").val("");
+                });                
                 session_length_label.innerHTML = "00:00:00";
+                session_part_length_label.innerHTML = "00:00:00";
+            });
+            pause_record_button.addEventListener("click", function () {
+                mediaRecorder.stop();
+                isSessionActive = false;
+                recorder.stop(record_start);
+                pause_record_button.setAttribute("disabled","disabled");
+                start_record_button.removeAttribute("disabled");
+                stopStreams(stream);
+                session_part_length_label.innerHTML = "00:00:00";
+                setTimeout(function() {
+                    session_part += 1;
+                });  
             });
         });
     }    
 }
 
+// function downloadMedia(blob,record_start,type){
+//     let record_end=Date();
+//     let a = document.createElement('a');
+//     a.href = URL.createObjectURL(blob);
+//     let PID = (document.getElementById('id-input-participant-id').value!='')?document.getElementById('id-input-participant-id').value:'PID';
+//     let SID = (document.getElementById('id-input-session-id').value!='')?document.getElementById('id-input-session-id').value:"SID";
+//     let file_name = PID+consts.connector+SID+consts.connector+'part-'+session_part+consts.connector+type+consts.connector+ record_start.slice(4,-33)+consts.connector+record_end.slice(16,-33)+".webm";
+//     file_name=file_name.split(" ").join("_");
+//     file_name=file_name.split(":").join(".");
+//     a.download = file_name;
+//     document.body.appendChild(a);
+//     a.click();
+//     URL.revokeObjectURL(a.href);
+// }
+
 function downloadMedia(blob,record_start,type){
     let record_end=Date();
-    let a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
     let PID = (document.getElementById('id-input-participant-id').value!='')?document.getElementById('id-input-participant-id').value:'PID';
     let SID = (document.getElementById('id-input-session-id').value!='')?document.getElementById('id-input-session-id').value:"SID";
-    let file_name = PID+consts.connector+SID+consts.connector+type+consts.connector+ record_start.slice(4,-33)+consts.connector+record_end.slice(16,-33)+".webm";
+    let file_name = PID+consts.connector+SID+consts.connector+'part-'+session_part+consts.connector+type+consts.connector+ record_start.slice(4,-33)+consts.connector+record_end.slice(16,-33)+".webm";
     file_name=file_name.split(" ").join("_");
     file_name=file_name.split(":").join(".");
-    a.download = file_name;
-    document.body.appendChild(a);
-    a.click();
+
+    var fd = new FormData();
+
+    fd.append('sessionBlob', blob,  file_name);
+
+    fetch('/postMedia',
+    {
+        method: 'post',
+        body: fd
+    }); 
+
 }
+
 
 // Auxiliary function : Call via console to get list of Cameras Connected
 function getConnectDevices(){
@@ -306,14 +382,14 @@ function recordTestAudio(mode) {
         if(mode=='subject') {
             let subject_status_div = document.getElementById('recording_status_subject');
             let content=subject_status_div.innerHTML;
-            content=content.concat('<p id="recording_progress" style="text-align: center"><i class="icon microphone"></i> </p>');
+            content=content.concat(`<p id="recording_progress" style="text-align: center"><i class="icon microphone"></i> </p>`);
             subject_status_div.innerHTML=content;
             stream = await navigator.mediaDevices.getUserMedia({audio:audioConstraints_env});
         }
         else{
             let subject_status_div = document.getElementById('recording_status_technician');
             let content=subject_status_div.innerHTML;
-            content=content.concat('<p id="recording_progress" style="text-align: center"><i class="icon microphone"></i> </p>');
+            content=content.concat(`<p id="recording_progress" style="text-align: center"><i class="icon microphone"></i> </p>`);
             subject_status_div.innerHTML=content;
             stream = await navigator.mediaDevices.getUserMedia({audio:audioConstraints});
         }
@@ -343,6 +419,7 @@ function recordTestAudio(mode) {
         resolve({start, stop,playAudio});
     });
 }
+
 const sleep = time => new Promise(resolve => setTimeout(resolve, time));
 
 async function testAudio(mode){
