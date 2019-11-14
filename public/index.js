@@ -29,8 +29,8 @@ const audioConstraints_env = {
 }
 var SessionTest = {
     isAudioTestSubjectReq: false,
-    isAudioTestTechnicianReq: false,
-    isVideoTestSubjectReq: false,
+    isAudioTestTechnicianReq: true,
+    isVideoTestSubjectReq: true,
     urlVideo: null
 }
 
@@ -132,12 +132,10 @@ function PlaySubjectTestVideo() {
 function TestConfirm(strTestType){
     if(strTestType == 'TestSubjectVideo'){
         document.getElementById('subject_video_active').click();
-        document.getElementById('subject_audio_active').click();
         document.getElementById('subject_video_okay').disabled=true;
         SessionTest.isVideoTestSubjectReq = false;
     }
     if(strTestType== 'TestSubjectAudio'){
-        document.getElementById('subject_audio_active').click();
         document.getElementById('technician_audio_active').click();
         document.getElementById('subject_audio_okay').disabled = true;
         SessionTest.isAudioTestSubjectReq = false;
@@ -183,7 +181,7 @@ function stopStreams(stream){
 
 const recordAudio = () =>
     new Promise(async resolve => {
-        const stream = await navigator.mediaDevices.getUserMedia({audio: true});
+        const stream = await navigator.mediaDevices.getUserMedia({audio: audioConstraints});
         const mediaRecorder = new MediaRecorder(stream);
         const audioChunks = [];
 
@@ -271,9 +269,10 @@ async function recordVideo(start_record_button) {
 
         new Promise(async resolve => {
             const stream = await navigator.mediaDevices.getUserMedia({audio: audioConstraints, video: videoConstraints});
+            const displaystream = await navigator.mediaDevices.getUserMedia({video: videoConstraints});
             const mediaRecorder = new MediaRecorder(stream);
             const videoChunks = [];
-            document.getElementById("videoElement").srcObject = stream;
+            document.getElementById("videoElement").srcObject = displaystream;
             mediaRecorder.ondataavailable = e => videoChunks.push(e.data);
             mediaRecorder.onstop = e => downloadMedia(new Blob(videoChunks),record_start,'video');
             mediaRecorder.start();
@@ -297,6 +296,7 @@ async function recordVideo(start_record_button) {
                     // stop and download the audio
                     recorder.stop(record_start);  
                     stopStreams(stream);
+                    stopStreams(displaystream);
                 }                
                 isSessionActive = false;
                 resetStartTimer();
@@ -341,11 +341,14 @@ async function recordVideo(start_record_button) {
 //     URL.revokeObjectURL(a.href);
 // }
 
+// this function saves the media in the localhost server folder instead of downloading it in downloads folder
 function downloadMedia(blob,record_start,type){
     let record_end=Date();
     let PID = (document.getElementById('id-input-participant-id').value!='')?document.getElementById('id-input-participant-id').value:'PID';
     let SID = (document.getElementById('id-input-session-id').value!='')?document.getElementById('id-input-session-id').value:"SID";
-    let file_name = PID+consts.connector+SID+consts.connector+'part-'+session_part+consts.connector+type+consts.connector+ record_start.slice(4,-33)+consts.connector+record_end.slice(16,-33)+".webm";
+    let format = ".mp4";
+    if(type=="audio") format = ".wav";
+    let file_name = PID+consts.connector+SID+consts.connector+'part-'+session_part+consts.connector+type+consts.connector+ record_start.slice(4,-33)+consts.connector+record_end.slice(16,-33)+format;
     file_name=file_name.split(" ").join("_");
     file_name=file_name.split(":").join(".");
 
@@ -357,8 +360,7 @@ function downloadMedia(blob,record_start,type){
     {
         method: 'post',
         body: fd
-    }); 
-
+    });
 }
 
 
@@ -405,16 +407,13 @@ function recordTestAudio(mode) {
                 const audioBlob = new Blob(audioChunks);
                 const audioUrl = URL.createObjectURL(audioBlob);
                 audio = new Audio(audioUrl);
-                // downloadMedia(audioBlob,record_start,'audio');
-                // return audio;
-                // audio.play();
             });
 
             mediaRecorder.stop();
         }
         const start = () => mediaRecorder.start();
         const playAudio = () =>{
-            audio.play;
+            audio.play();
         }
         resolve({start, stop,playAudio});
     });
@@ -425,10 +424,9 @@ const sleep = time => new Promise(resolve => setTimeout(resolve, time));
 async function testAudio(mode){
     recorder = await recordTestAudio(mode);
     recorder.start();
-    await sleep(3000);
+    await sleep(10000);
     removeStatus();
     await recorder.stop();
-    // recorder.audio.play;
 };
 
 function playTestAudio(){

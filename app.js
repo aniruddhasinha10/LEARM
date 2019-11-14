@@ -50,6 +50,9 @@ app.post("/startsession", function (request, respond) {
 
 app.post("/newsession", function (request, respond) {
 
+    if(request.body.type!="") {
+        CType = CTypes[request.body.type];
+    }
 
     let uploadLocation = __dirname + '/LEARM-DATA/';
     uploadLocation += CPid + '_' + CSid;
@@ -72,8 +75,10 @@ app.post("/newsession", function (request, respond) {
       path: strFileName,
       header: [
         {id: 'pid', title: 'PId'},
+        {id: 'type', title: 'Type'},
         {id: 'date', title: 'Date'},
         {id: 'delay', title: 'Delay'},
+        {id: 'delaytype', title: 'Delay Type'},
         {id: 'cue', title: 'Cue'},
         {id: 'rate', title: 'Rate'},
         {id: 'review', title: 'Review'}
@@ -111,10 +116,13 @@ app.post('/postcue', function(request, respond) {
     let cue = request.body.cue;
     let rate = request.body.rate;
     let review = request.body.review;
+    let delaytype = request.body.delaytype;
 
     const row = [ 
       {
         pid: CPid,
+        type: CType,
+        delaytype: delaytype,
         date: date,
         delay: delay,
         cue: cue,
