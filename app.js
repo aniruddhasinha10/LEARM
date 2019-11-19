@@ -6,7 +6,7 @@ let express = require("express"),
     createCsvWriter = require('csv-writer').createObjectCsvWriter,
     app = express();
 
-const execSync = require('child_process').execSync;
+const exec = require('child_process').exec;
 
 // store in cookie
 let CPid = 0;
@@ -31,12 +31,17 @@ app.get("/", function (req, res) {
     res.render("index");
 });
 
-app.get("/duplicate", function (req, res) {	
-	execSync('DisplaySwitch.exe /clone', { encoding: 'utf-8' });   
-});
-
-app.get("/internal", function (req, res) {	
-	execSync('DisplaySwitch.exe /internal', { encoding: 'utf-8' });   
+app.post("/togglescreen", function (request, respond) {	
+    console.log(request.body.screen);
+    let command = 'DisplaySwitch.exe /' + request.body.screen;
+	exec(command, { stdio: 'inherit', encoding: 'utf-8' }, (error, stdout, stderr) => {
+      if (error) {
+        console.log("error");
+      } else {
+        console.log("no error");
+        respond.sendStatus(200);
+      }
+    });
 });
 
 app.post("/startsession", function (request, respond) {  
@@ -98,7 +103,6 @@ function writeFileSyncRecursive(filename, content) {
 }
 
 app.post('/postMedia', upload.single('sessionBlob'), function (req, res) {
-
     let uploadLocation = __dirname + '/LEARM-DATA/';
     uploadLocation += CPid + '_' + CSid;
     uploadLocation += '/SessionData/';
@@ -106,7 +110,6 @@ app.post('/postMedia', upload.single('sessionBlob'), function (req, res) {
 
     writeFileSyncRecursive(uploadLocation, Buffer.from(new Uint8Array(req.file.buffer))); // write the blob to the server as a file
     res.sendStatus(200);
-
 });
 
 app.post('/postcue', function(request, respond) {
@@ -134,9 +137,8 @@ app.post('/postcue', function(request, respond) {
     csvWriter
       .writeRecords(row)
       .then(()=> console.log('The CSV file was written successfully'));
-
 });
 
 app.listen(3000, function () {
-    console.log("Loading awesomeness");
+    console.log("LEARM server started");
 });

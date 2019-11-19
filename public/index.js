@@ -45,14 +45,25 @@ function bindEventListener(){
     });
 
     document.getElementById('id-input-toggle-display').addEventListener('click', function() {
+        // if isParticipantView is true - toggling should make the second screen vanish
+        console.log("toggling check");
+        let screen_config = "";
         if(isParticipantView) {
-            window.location.href = `http://localhost:3000/internal`;   
+            screen_config = "internal";
+        }
+        // else if it false - we need to duplicate the screen 
+        else if (!isParticipantView) {    
+            $('.ui.sidebar').sidebar('hide');
+            screen_config = "clone";
         }
         isParticipantView = !isParticipantView;
-        if (isParticipantView) {    
-            $('.ui.sidebar').sidebar('hide');
-            window.location.href = `http://localhost:3000/duplicate`;
-        }
+        fetch('/togglescreen', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body:JSON.stringify({ screen : screen_config })
+            });
     });
 
     document.onkeyup = function(e) {
