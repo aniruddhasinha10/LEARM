@@ -32,13 +32,13 @@ app.get("/", function (req, res) {
 });
 
 app.post("/togglescreen", function (request, respond) {	
-    console.log(request.body.screen);
+    // console.log(request.body.screen);
     let command = 'DisplaySwitch.exe /' + request.body.screen;
 	exec(command, { stdio: 'inherit', encoding: 'utf-8' }, (error, stdout, stderr) => {
       if (error) {
-        console.log("error");
+        // console.log("error");
       } else {
-        console.log("no error");
+        // console.log("no error");
         respond.sendStatus(200);
       }
     });

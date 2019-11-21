@@ -46,7 +46,7 @@ function bindEventListener(){
 
     document.getElementById('id-input-toggle-display').addEventListener('click', function() {
         // if isParticipantView is true - toggling should make the second screen vanish
-        console.log("toggling check");
+        // console.log("toggling check");
         let screen_config = "";
         if(isParticipantView) {
             screen_config = "internal";
