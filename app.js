@@ -61,7 +61,7 @@ app.post("/newsession", function (request, respond) {
 
     let uploadLocation = __dirname + '/LEARM-DATA/';
     uploadLocation += CPid + '_' + CSid;
-    uploadLocation += '/SessionData/';
+    uploadLocation += '/session_data/';
 
     strFileName = uploadLocation + CPid + '_' + CSid + '_' + new Date().toISOString().slice(0,10) + '.csv';
 
@@ -105,7 +105,15 @@ function writeFileSyncRecursive(filename, content) {
 app.post('/postMedia', upload.single('sessionBlob'), function (req, res) {
     let uploadLocation = __dirname + '/LEARM-DATA/';
     uploadLocation += CPid + '_' + CSid;
-    uploadLocation += '/SessionData/';
+    uploadLocation += '/session_data/';
+
+    if(req.file.originalname.indexOf("audio") >= 0){
+        uploadLocation += 'tech_media/';
+    }
+    else {
+        uploadLocation += 'subject_media/';
+    }
+
     uploadLocation += req.file.originalname;
 
     writeFileSyncRecursive(uploadLocation, Buffer.from(new Uint8Array(req.file.buffer))); // write the blob to the server as a file
