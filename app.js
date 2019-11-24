@@ -86,7 +86,9 @@ app.post("/newsession", function (request, respond) {
         {id: 'delaytype', title: 'Delay Type'},
         {id: 'cue', title: 'Cue'},
         {id: 'rate', title: 'Rate'},
-        {id: 'review', title: 'Review'}
+        {id: 'review', title: 'Review'},
+        {id: 'isvideo', title: 'Video'},
+        {id: 'videotype', title: 'Video Type'}
       ]
     });
 });
@@ -128,6 +130,8 @@ app.post('/postcue', function(request, respond) {
     let rate = request.body.rate;
     let review = request.body.review;
     let delaytype = request.body.delaytype;
+    let isvideo = request.body.isVideo ? request.body.isVideo : 0;
+    let videotype = request.body.VideoType ? request.body.VideoType : "";
 
     const row = [ 
       {
@@ -138,7 +142,9 @@ app.post('/postcue', function(request, respond) {
         delay: delay,
         cue: cue,
         rate: rate,
-        review: review
+        review: review,
+        isvideo: isvideo,
+        videotype: videotype
       }
     ];
 
