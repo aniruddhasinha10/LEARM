@@ -261,6 +261,8 @@ function updateSessionTimer(){
     }, 500);
 }
 
+// start session
+// main function that starts recording the media
 async function recordVideo(start_record_button) {
     if( $('.ui.form').form('is valid')) {
         // start video preview

@@ -33,6 +33,7 @@ app.get("/", function (req, res) {
 
 app.post("/togglescreen", function (request, respond) {	
     // console.log(request.body.screen);
+    // run a windows command for switching the screen mode
     let command = 'DisplaySwitch.exe /' + request.body.screen;
 	exec(command, { stdio: 'inherit', encoding: 'utf-8' }, (error, stdout, stderr) => {
       if (error) {
@@ -55,6 +56,7 @@ app.post("/startsession", function (request, respond) {
 
 app.post("/newsession", function (request, respond) {
 
+    // called after the first page when the type of session is selected
     if(request.body.type!="") {
         CType = CTypes[request.body.type];
     }
@@ -63,19 +65,20 @@ app.post("/newsession", function (request, respond) {
     uploadLocation += CPid + '_' + CSid;
     uploadLocation += '/session_data/';
 
+    // create folders for each type of media
+    createMediaFolders(uploadLocation);
+
+    // create csv file for saving cue data
     strFileName = uploadLocation + CPid + '_' + CSid + '_' + new Date().toISOString().slice(0,10) + '.csv';
 
-    strFileName.split('/').slice(0,-1).reduce( (last, folder)=>{
-        let folderPath = last ? (last + '/' + folder) : folder;
-        if (!fs.existsSync(folderPath)) fs.mkdirSync(folderPath);
-        return folderPath;
-    })
+    createFolder(strFileName);
 
     fs.open(strFileName, 'w' ,function (err, file) {
           if (err) throw err;
           console.log('New session file is created successfully.');
     });
     
+    // creating csv object , define colums/headers for the cue data
     csvWriter = createCsvWriter({
       path: strFileName,
       header: [
@@ -93,37 +96,59 @@ app.post("/newsession", function (request, respond) {
     });
 });
 
-function writeFileSyncRecursive(filename, content) {
-    // create folder path if not exists
-    filename.split('/').slice(0,-1).reduce( (last, folder)=>{
+function createMediaFolders(uploadLocation) {
+    // audio & video folder creation for both technician and subject
+    // subject_media, tech_media
+    let subject_media = uploadLocation + 'subject_media/';
+    let tech_media = uploadLocation + 'tech_media/';
+
+    createFolder(subject_media + 'audio/');
+    createFolder(subject_media + 'video/');
+    createFolder(tech_media + 'audio/');
+    createFolder(tech_media + 'video/');   
+}
+
+function createFolder(strFileName) {
+    strFileName.split('/').slice(0,-1).reduce( (last, folder)=>{
         let folderPath = last ? (last + '/' + folder) : folder;
         if (!fs.existsSync(folderPath)) fs.mkdirSync(folderPath);
         return folderPath;
     })
+}
+
+function writeFileSyncRecursive(filename, content) {
+    // create folder path if not exists
+    createFolder(filename);
     
     fs.writeFileSync(filename, content);
 }
 
 app.post('/postMedia', upload.single('sessionBlob'), function (req, res) {
+    
+    // save video/audio files sent from learm client
+
     let uploadLocation = __dirname + '/LEARM-DATA/';
     uploadLocation += CPid + '_' + CSid;
     uploadLocation += '/session_data/';
 
     if(req.file.originalname.indexOf("audio") >= 0){
-        uploadLocation += 'tech_media/';
+        uploadLocation += 'tech_media/audio/';
     }
     else {
-        uploadLocation += 'subject_media/';
+        uploadLocation += 'subject_media/video/';
     }
 
     uploadLocation += req.file.originalname;
 
-    writeFileSyncRecursive(uploadLocation, Buffer.from(new Uint8Array(req.file.buffer))); // write the blob to the server as a file
+    // write the blob to the server as a file
+    fs.writeFileSync(uploadLocation, Buffer.from(new Uint8Array(req.file.buffer)));
+     
     res.sendStatus(200);
 });
 
 app.post('/postcue', function(request, respond) {
     // type, pid, date, version, delay, cue, rate, review  
+    // get parameters from the call to save it in the csv file
     let date = new Date().toLocaleString("en-US");
     let delay = request.body.duration;
     let cue = request.body.cue;
@@ -148,6 +173,7 @@ app.post('/postcue', function(request, respond) {
       }
     ];
 
+    // write the cue record to csv file
     csvWriter
       .writeRecords(row)
       .then(()=> console.log('The CSV file was written successfully'));
