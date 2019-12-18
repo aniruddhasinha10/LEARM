@@ -1,0 +1,4 @@
+aud_file | D:/Karthik/MS_CS/Summer_19/MicroExpressions/Package/Examples/Exp/aud2_1.wav
+vid_file | D:/Karthik/MS_CS/Summer_19/MicroExpressions/Package/Examples/Exp/vid1_1.mp4
+audio_analysis | D:/Karthik/MS_CS/Summer_19/MicroExpressions/Package/Examples/Exp/aud1.csv
+video_analysis | D:/Karthik/MS_CS/Summer_19/MicroExpressions/Package/Examples/Exp/vid1.csv
