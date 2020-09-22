@@ -1,0 +1,4 @@
+vid_file | F:/LEARM Testing/IM176_2/session_data/subject_media/processedVideos/IM176_2_part-1_video_Nov_26_2019_18.31.58_18.32.24.mp4
+audio_analysis | F:/LEARM Testing/IM176_2/analysis_data/IM176_2_part-1_video_Nov_26_2019_18.31.58_18.32.24/audio_analysis_subject.txt
+video_analysis | F:/LEARM Testing/IM176_2/analysis_data/IM176_2_part-1_video_Nov_26_2019_18.31.58_18.32.24/video_analysis_subject.txt
+text_analysis | F:/LEARM Testing/IM176_2/analysis_data/IM176_2_part-1_video_Nov_26_2019_18.31.58_18.32.24/text_analysis_subject.txt
