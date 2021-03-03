@@ -1,0 +1,84 @@
+combined_stats_smooth_solo.csv | ERROR:::: [Errno 2] File ../Sessions/combined_stats_smooth_solo.csv/processed_data/combined_stats_smooth_solo.csv_video_analysis_filtered.csv does not exist: '../Sessions/combined_stats_smooth_solo.csv/processed_data/combined_stats_smooth_solo.csv_video_analysis_filtered.csv' |  didn't execute correctly. 
+
+combined_stats_solo.csv | ERROR:::: [Errno 2] File ../Sessions/combined_stats_solo.csv/processed_data/combined_stats_solo.csv_video_analysis_filtered.csv does not exist: '../Sessions/combined_stats_solo.csv/processed_data/combined_stats_solo.csv_video_analysis_filtered.csv' |  didn't execute correctly. 
+
+combined_thresh_smooth_solo.csv | ERROR:::: [Errno 2] File ../Sessions/combined_thresh_smooth_solo.csv/processed_data/combined_thresh_smooth_solo.csv_video_analysis_filtered.csv does not exist: '../Sessions/combined_thresh_smooth_solo.csv/processed_data/combined_thresh_smooth_solo.csv_video_analysis_filtered.csv' |  didn't execute correctly. 
+
+combined_thresh_solo.csv | ERROR:::: [Errno 2] File ../Sessions/combined_thresh_solo.csv/processed_data/combined_thresh_solo.csv_video_analysis_filtered.csv does not exist: '../Sessions/combined_thresh_solo.csv/processed_data/combined_thresh_solo.csv_video_analysis_filtered.csv' |  didn't execute correctly. 
+
+IM175_1 |  successfully written. No ISSUES.
+
+IM176_2 |  successfully written. No ISSUES.
+
+IM177_3 |  successfully written. No ISSUES.
+
+IM178_4 |  successfully written. No ISSUES.
+
+IM179_5 |  successfully written. No ISSUES.
+
+IM180_6 |  successfully written. No ISSUES.
+
+IM181_7 |  successfully written. No ISSUES.
+
+IM182_9 |  successfully written. No ISSUES.
+
+IM183_8 |  successfully written. No ISSUES.
+
+IM184_18 |  successfully written. No ISSUES.
+
+IM186_19 | ERROR:::: [Errno 2] File ../Sessions/IM186_19/processed_data/IM186_19_video_analysis_filtered.csv does not exist: '../Sessions/IM186_19/processed_data/IM186_19_video_analysis_filtered.csv' |  didn't execute correctly. 
+
+IM187_11 |  successfully written. No ISSUES.
+
+IM188_14 | ERROR:::: [Errno 2] File ../Sessions/IM188_14/processed_data/IM188_14_video_analysis_filtered.csv does not exist: '../Sessions/IM188_14/processed_data/IM188_14_video_analysis_filtered.csv' |  didn't execute correctly. 
+
+IM189_16 |  successfully written. No ISSUES.
+
+IM190_15 |  successfully written. No ISSUES.
+
+IM191_12 |  successfully written. No ISSUES.
+
+IM192_10 |  successfully written. No ISSUES.
+
+IM193_13 |  successfully written. No ISSUES.
+
+IM197_17 |  successfully written. No ISSUES.
+
+IM200_21 |  successfully written. No ISSUES.
+
+IM201_25 |  successfully written. No ISSUES.
+
+IM201_25.rar | ERROR:::: [Errno 2] File ../Sessions/IM201_25.rar/processed_data/IM201_25.rar_video_analysis_filtered.csv does not exist: '../Sessions/IM201_25.rar/processed_data/IM201_25.rar_video_analysis_filtered.csv' |  didn't execute correctly. 
+
+IM203_23 |  successfully written. No ISSUES.
+
+MediaAnalysis | ERROR:::: [Errno 2] File ../Sessions/MediaAnalysis/processed_data/MediaAnalysis_video_analysis_filtered.csv does not exist: '../Sessions/MediaAnalysis/processed_data/MediaAnalysis_video_analysis_filtered.csv' |  didn't execute correctly. 
+
+MediaAnalysis.rar | ERROR:::: [Errno 2] File ../Sessions/MediaAnalysis.rar/processed_data/MediaAnalysis.rar_video_analysis_filtered.csv does not exist: '../Sessions/MediaAnalysis.rar/processed_data/MediaAnalysis.rar_video_analysis_filtered.csv' |  didn't execute correctly. 
+
+Plots | ERROR:::: [Errno 2] File ../Sessions/Plots/processed_data/Plots_video_analysis_filtered.csv does not exist: '../Sessions/Plots/processed_data/Plots_video_analysis_filtered.csv' |  didn't execute correctly. 
+
+Plots.rar | ERROR:::: [Errno 2] File ../Sessions/Plots.rar/processed_data/Plots.rar_video_analysis_filtered.csv does not exist: '../Sessions/Plots.rar/processed_data/Plots.rar_video_analysis_filtered.csv' |  didn't execute correctly. 
+
+Sessions | ERROR:::: [Errno 2] File ../Sessions/Sessions/processed_data/Sessions_video_analysis_filtered.csv does not exist: '../Sessions/Sessions/processed_data/Sessions_video_analysis_filtered.csv' |  didn't execute correctly. 
+
+Sessions.rar | ERROR:::: [Errno 2] File ../Sessions/Sessions.rar/processed_data/Sessions.rar_video_analysis_filtered.csv does not exist: '../Sessions/Sessions.rar/processed_data/Sessions.rar_video_analysis_filtered.csv' |  didn't execute correctly. 
+
+Video-Raw.csv | ERROR:::: [Errno 2] File ../Sessions/Video-Raw.csv/processed_data/Video-Raw.csv_video_analysis_filtered.csv does not exist: '../Sessions/Video-Raw.csv/processed_data/Video-Raw.csv_video_analysis_filtered.csv' |  didn't execute correctly. 
+
+Video-Sta.csv | ERROR:::: [Errno 2] File ../Sessions/Video-Sta.csv/processed_data/Video-Sta.csv_video_analysis_filtered.csv does not exist: '../Sessions/Video-Sta.csv/processed_data/Video-Sta.csv_video_analysis_filtered.csv' |  didn't execute correctly. 
+
+Video-Stats-Compiled.xlsx | ERROR:::: [Errno 2] File ../Sessions/Video-Stats-Compiled.xlsx/processed_data/Video-Stats-Compiled.xlsx_video_analysis_filtered.csv does not exist: '../Sessions/Video-Stats-Compiled.xlsx/processed_data/Video-Stats-Compiled.xlsx_video_analysis_filtered.csv' |  didn't execute correctly. 
+
+Video-Stats-Smoothed-Compiled.xlsx | ERROR:::: [Errno 2] File ../Sessions/Video-Stats-Smoothed-Compiled.xlsx/processed_data/Video-Stats-Smoothed-Compiled.xlsx_video_analysis_filtered.csv does not exist: '../Sessions/Video-Stats-Smoothed-Compiled.xlsx/processed_data/Video-Stats-Smoothed-Compiled.xlsx_video_analysis_filtered.csv' |  didn't execute correctly. 
+
+Video-Stats-Smoothed.csv | ERROR:::: [Errno 2] File ../Sessions/Video-Stats-Smoothed.csv/processed_data/Video-Stats-Smoothed.csv_video_analysis_filtered.csv does not exist: '../Sessions/Video-Stats-Smoothed.csv/processed_data/Video-Stats-Smoothed.csv_video_analysis_filtered.csv' |  didn't execute correctly. 
+
+Video-Thresh-Compiled.xlsx | ERROR:::: [Errno 2] File ../Sessions/Video-Thresh-Compiled.xlsx/processed_data/Video-Thresh-Compiled.xlsx_video_analysis_filtered.csv does not exist: '../Sessions/Video-Thresh-Compiled.xlsx/processed_data/Video-Thresh-Compiled.xlsx_video_analysis_filtered.csv' |  didn't execute correctly. 
+
+Video-Thresh-Smoothed-Compiled.xlsx | ERROR:::: [Errno 2] File ../Sessions/Video-Thresh-Smoothed-Compiled.xlsx/processed_data/Video-Thresh-Smoothed-Compiled.xlsx_video_analysis_filtered.csv does not exist: '../Sessions/Video-Thresh-Smoothed-Compiled.xlsx/processed_data/Video-Thresh-Smoothed-Compiled.xlsx_video_analysis_filtered.csv' |  didn't execute correctly. 
+
+Video-Thresh-Smoothed.csv | ERROR:::: [Errno 2] File ../Sessions/Video-Thresh-Smoothed.csv/processed_data/Video-Thresh-Smoothed.csv_video_analysis_filtered.csv does not exist: '../Sessions/Video-Thresh-Smoothed.csv/processed_data/Video-Thresh-Smoothed.csv_video_analysis_filtered.csv' |  didn't execute correctly. 
+
+Video-Thresh.csv | ERROR:::: [Errno 2] File ../Sessions/Video-Thresh.csv/processed_data/Video-Thresh.csv_video_analysis_filtered.csv does not exist: '../Sessions/Video-Thresh.csv/processed_data/Video-Thresh.csv_video_analysis_filtered.csv' |  didn't execute correctly. 
+
